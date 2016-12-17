@@ -1,0 +1,13 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+GET		/users								com.codingkapoor.playslickscala.controllers.UserController.getAllUsers
+POST	/users								com.codingkapoor.playslickscala.controllers.UserController.createUser
+GET		/users/:userId						com.codingkapoor.playslickscala.controllers.UserController.getUser(userId: Long)
+DELETE	/users/:userId						com.codingkapoor.playslickscala.controllers.UserController.deleteUser(userId: Long)
+
+GET		/users/:userId/addresses			com.codingkapoor.playslickscala.controllers.AddressController.getAllUserAddresses(userId: Long)
+POST	/users/:userId/addresses			com.codingkapoor.playslickscala.controllers.AddressController.createAddress(userId: Long)
+GET		/users/:userId/addresses/:addressId	com.codingkapoor.playslickscala.controllers.AddressController.getUserAddress(userId: Long, addressId: Long)
+DELETE	/users/:userId/addresses/:addressId	com.codingkapoor.playslickscala.controllers.AddressController.deleteAddress(userId: Long, addressId: Long)
