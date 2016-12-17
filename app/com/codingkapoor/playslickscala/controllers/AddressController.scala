@@ -19,13 +19,14 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 class AddressController @Inject() (addressService: AddressService) extends Controller {
 
+  // TODO Client should be able to send `Address` as JSON without `userId`
   implicit val deserializer: Reads[Address] = (
     (JsPath \ "city").read[String] and
     (JsPath \ "state").read[String] and
     (JsPath \ "zip").read[Long] and
     (JsPath \ "userId").readNullable[Long])(Address.apply(_: String, _: String, _: Long, _: Option[Long]))
 
-  implicit val userWrites = new Writes[Address] {
+  implicit val serializer = new Writes[Address] {
     def writes(address: Address) = Json.obj(
       "id" -> address.id,
       "city" -> address.city,
@@ -40,7 +41,7 @@ class AddressController @Inject() (addressService: AddressService) extends Contr
   }
 
   def getUserAddress(userId: Long, addressId: Long) = Action.async {
-    addressService.getUserAddress(addressId) map {
+    addressService.getUserAddress(userId, addressId) map {
       case Some(address) => Ok(Json.toJson(address))
       case None          => NotFound
     }
@@ -50,7 +51,7 @@ class AddressController @Inject() (addressService: AddressService) extends Contr
     implicit request =>
       request.body.validate[Address] match {
         case JsSuccess(createAddress, _) =>
-          addressService.createAddress(createAddress.city, createAddress.state, createAddress.zip, createAddress.userId) map {
+          addressService.createAddress(createAddress.city, createAddress.state, createAddress.zip, Some(userId)) map {
             res => Created
           }
         case JsError(errors) => Future(BadRequest)
@@ -58,7 +59,7 @@ class AddressController @Inject() (addressService: AddressService) extends Contr
   }
 
   def deleteAddress(userId: Long, addressId: Long) = Action.async {
-    addressService.deleteAddress(addressId) map {
+    addressService.deleteAddress(userId, addressId) map {
       res => Ok(Json.toJson(res))
     }
   }
