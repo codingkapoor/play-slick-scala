@@ -1,4 +1,4 @@
-# play-slick-scala
+# Play Slick Scala
 Restful webservices in Scala using Play framework and Slick
 
 # Setup Database
