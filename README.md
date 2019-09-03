@@ -32,7 +32,7 @@ sbt eclipse;
 sbt clean compile run;
 ```
 
-# Create User
+## Create User
 
 ```
 curl -X POST \
