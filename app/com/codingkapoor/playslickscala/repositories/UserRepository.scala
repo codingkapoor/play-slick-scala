@@ -30,21 +30,21 @@ class UserRepositoryImpl @Inject() (dbConfigProvider: DatabaseConfigProvider) ex
   val users = UserTableDef.users
 
   def getAllUsers(): Future[Seq[User]] = {
-    dbConfig.db.run(users.result)
+    dbConfig.db.run(Compiled(users).result)
   }
 
   def getUser(id: Long): Future[Option[User]] = {
-    dbConfig.db.run(users.filter(_.id === id).result.headOption)
+    dbConfig.db.run(Compiled(users.filter(_.id === id)).result.headOption)
   }
 
   def createUser(user: User): Future[String] = {
-    dbConfig.db.run(users += user).map(result => "User created successfully").recover {
+    dbConfig.db.run(Compiled(users) += user).map(result => "User created successfully").recover {
       case ex: Exception => ex.getCause.getMessage
     }
   }
 
   def deleteUser(id: Long): Future[Int] = {
-    dbConfig.db.run(users.filter(_.id === id).delete)
+    dbConfig.db.run(Compiled(users.filter(_.id === id)).delete)
   }
 
 }
