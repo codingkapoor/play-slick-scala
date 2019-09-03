@@ -1,8 +1,7 @@
 # Play Slick Scala
 Restful webservices in Scala using Play framework and Slick
 
-# Setup Database
-**Note:** Insert appropriate values after setting up database.
+## Setup Database
 
 ```
 CREATE DATABASE slick;
@@ -26,8 +25,23 @@ CREATE TABLE `ADDRESS` (
 );
 ```
 
-# Run
+## Start Service
+
 ```
 sbt eclipse;
 sbt clean compile run;
+```
+
+# Create User
+
+```
+curl -X POST \
+  http://localhost:9000/users \
+  -H 'content-type: application/json' \
+  -d '{
+	"firstName": "Shivam",
+	"lastName": "Kapoor",
+	"mobile": 9663006554,
+	"email": "mail@shivamkapoor.com"
+}'
 ```
